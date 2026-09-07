@@ -26,6 +26,8 @@ body {
 }
 
 .navbar {
+    // Keep the user menu above content that creates its own stacking context.
+    z-index: $zindex-dropdown;
     background: linear-gradient(100deg, rgba(255, 240, 247, .96), rgba(250, 225, 240, .96), rgba(239, 226, 250, .96)) !important;
     border-bottom: 1px solid rgba(233, 139, 173, .25);
     backdrop-filter: blur(12px);
