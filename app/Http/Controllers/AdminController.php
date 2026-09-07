@@ -3,36 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Blog;
 
 class AdminController extends Controller
 {
     function blog()
     {
-        $blogs = DB::table('blogs')->orderBy('id')->paginate(10);
+        $blogs = Blog::orderBy('id')->paginate(10);
 
         return view('blog', compact('blogs'));
     }
 
     function delete($id)
     {
-        DB::table('blogs')->where('id', $id)->delete();
-        return redirect('blog');
+        Blog::findOrFail($id)->delete();
+        return redirect()->back();
     }
 
     function edit($id)
     {
-        $blog = DB::table('blogs')->where('id', $id)->first();
-        return view('edit', compact('blog'));
+        $blog = Blog::findOrFail($id);
+        return view("edit", compact('blog'));
     }
 
     function update(Request $request, $id)
     {
-        $request->validate(
+        $blog = Blog::findOrFail($id);
+
+        $data = $request->validate(
             [
-                'title' => 'required|max:50',
-                'content' => 'required',
-                'status' => 'required',
+                'title' => 'required|string|max:50',
+                'content' => 'required|string',
+                'status' => 'required|in:active,inactive',
             ],
             [
                 'title.required' => 'กรุณากรอกชื่อบทความ',
@@ -42,15 +44,9 @@ class AdminController extends Controller
             ],
         );
 
-        $data = [
-            'title' => $request->title,
-            'content' => $request->content,
-            'status' => $request->status,
-        ];
+        $blog->update($data);
 
-        DB::table('blogs')->where('id', $id)->update($data);
-
-        return redirect('blog');
+        return redirect('/author/blog');
     }
 
     function about()
@@ -65,11 +61,11 @@ class AdminController extends Controller
 
     function insert(Request $request)
     {
-        $request->validate(
+        $data = $request->validate(
             [
-                'title' => 'required|max:50',
-                'content' => 'required',
-                'status' => 'required',
+                'title' => 'required|string|max:50',
+                'content' => 'required|string',
+                'status' => 'required|in:active,inactive',
             ],
             [
                 'title.required' => 'กรุณากรอกชื่อบทความ',
@@ -79,15 +75,9 @@ class AdminController extends Controller
             ],
         );
 
-        $data = [
-            'title' => $request->title,
-            'content' => $request->content,
-            'status' => $request->status,
-        ];
+        Blog::create($data);
 
-        DB::table('blogs')->insert($data);
-
-        return redirect('blog');
+        return redirect('/author/blog');
     }
 
     function form()
@@ -97,7 +87,7 @@ class AdminController extends Controller
 
     function changestatus(Request $request, $id)
     {
-        $blog = DB::table('blogs')->where('id', $id)->first();
+        $blog = Blog::findOrFail($id);
 
         if ($blog->status === 'active') {
             $status = 'inactive';
@@ -105,15 +95,13 @@ class AdminController extends Controller
             $status = 'active';
         }
 
-        DB::table('blogs')
-            ->where('id', $id)
-            ->update(['status' => $status]);
+        $blog->update(['status' => $status]);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'status' => $status]);
         }
 
-        return redirect('blog');
+        return redirect('/author/blog');
     }
 
     function __construct()

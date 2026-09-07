@@ -47,6 +47,6 @@
         </div>
 
         <button type="submit" class="btn btn-success">บันทึกการแก้ไข</button>
-        <a href="{{ route('blog') }}" class="btn btn-secondary">ยกเลิก</a>
+        <a href="/author/blog" class="btn btn-secondary">บทความทั้งหมด</a>
     </form>
 @endsection

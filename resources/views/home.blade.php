@@ -15,6 +15,10 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <div class="mt-3 d-flex gap-2">
+                        <a href="/author/create" class="btn btn-primary">เขียนบทความ</a>
+                        <a href="/author/blog" class="btn btn-outline-primary">บทความของฉัน</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,13 +9,23 @@ Route::get('/', function () {
     return view('index');
 })->name('welcome');
 
-Route::get('/about', [AdminController::class, 'about'])->name('about');
+Route::prefix('author')->group(function () {
+    Route::get('/about', [AdminController::class, 'about'])->name('about');
 
-Route::get('/blog', [AdminController::class, 'blog'])->name('blog');
+    Route::get('/blog', [AdminController::class, 'blog'])->name('blog');
 
-Route::get('/form', [AdminController::class, 'form'])->name('form');
+    Route::get('/create', [AdminController::class, 'form'])->name('form');
 
-Route::post('/insert', [AdminController::class, 'insert'])->name('insert');
+    Route::post('/insert', [AdminController::class, 'insert'])->name('insert');
+
+    Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('book.edit');
+
+    Route::put('/update/{id}', [AdminController::class, 'update'])->name('book.update');
+
+    Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('book.delete');
+
+    Route::delete('/chang/{id}', [AdminController::class, 'changestatus'])->name('book.chang');
+});
 
 Route::get('/books', [BookController::class, 'index'])->name('book');
 
@@ -30,13 +40,6 @@ Route::get('/test_db', function () {
     }
 });
 
-Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('book.edit');
-
-Route::put('/update/{id}', [AdminController::class, 'update'])->name('book.update');
-
-Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('book.delete');
-
-Route::delete('/chang/{id}', [AdminController::class, 'changestatus'])->name('book.chang');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

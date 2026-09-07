@@ -6,7 +6,7 @@
 
     <h2>เขียนบทความใหม่</h2>
 
-    <form action="{{ route('insert') }}" method="POST">
+    <form action="/author/insert" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -30,7 +30,7 @@
 
         <button type="submit" name="status" value="active" class="btn btn-success">เผยแพร่</button>
         <button type="submit" name="status" value="inactive" class="btn btn-warning">บันทึกฉบับร่าง</button>
-        <a class="btn btn-danger" href="{{ route('blog') }}">ยกเลิก</a>
+        <a class="btn btn-danger" href="/author/blog">บทความทั้งหมด</a>
 
     </form>
 

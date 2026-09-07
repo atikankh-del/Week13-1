@@ -9,9 +9,12 @@ class Blog extends Model
 {
     use HasFactory;
 
+    // Only these article fields may be assigned through create() or update().
     protected $fillable = [
         'title',
         'content',
         'status',
     ];
 }
+
+
